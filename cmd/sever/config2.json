@@ -1,0 +1,30 @@
+{
+    "Hosts":[
+        {
+            "Host":"127.0.0.1:50052",
+            "Weight":1,
+            "Status":true
+        },{
+            "Host":"127.0.0.1:50051",
+            "Weight":1,
+            "Status":true
+        }
+    ],
+    "Routers":[
+        {
+            "Package":"proto",
+            "Service":"Greeter",
+            "Method":"SayHello",
+            "InMessage":"hello.HelloRequest",
+            "OutMessage":"hello.HelloReply"
+        },
+        {
+            "Package":"proto",
+            "Service":"NewGreeter",
+            "Method":"SayHello",
+            "MethodType":"POST",
+            "InMessage":"test.TestRequest",
+            "OutMessage":"test.TestReply"
+        }
+    ]
+}
