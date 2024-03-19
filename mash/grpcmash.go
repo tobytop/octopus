@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"net"
+	"net/http"
 	"octopus/config"
 	meta "octopus/metadata"
 	"octopus/pool"
@@ -86,6 +87,27 @@ func (m *mashbase) stop() {
 		for _, service := range wares {
 			service.Stop()
 		}
+	}
+}
+
+func (m *mashbase) errhandler(w http.ResponseWriter) {
+	if err := recover(); err != nil {
+		var msg string
+		if e, ok := err.(error); ok {
+			m.logger.Error().Err(e).Msg(e.Error())
+			msg = e.Error()
+		} else {
+			m.logger.Error().Any("Panic", err).Msg(config.SYSTEMERROR)
+			if msg, ok = err.(string); !ok {
+				msg = config.SYSTEMERROR
+			}
+		}
+		m.logger.Error().Msg(meta.LoggerTrace())
+
+		if !m.isdebug {
+			msg = config.SYSTEMERROR
+		}
+		http.Error(w, msg, http.StatusInternalServerError)
 	}
 }
 

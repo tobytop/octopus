@@ -233,7 +233,7 @@ func (m *HttpMash) Listen() error {
 		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 			ctx, cancel := context.WithCancel(context.Background())
 			defer func() {
-				errhandler(m.isdebug, w, m.logger)
+				m.errhandler(w)
 				cancel()
 			}()
 
@@ -276,27 +276,6 @@ func (m *HttpMash) Listen() error {
 	}
 	m.server.Handler = mux
 	return m.server.ListenAndServe()
-}
-
-func errhandler(isdebug bool, w http.ResponseWriter, logger *zerolog.Logger) {
-	if err := recover(); err != nil {
-		var msg string
-		if e, ok := err.(error); ok {
-			logger.Error().Err(e).Msg(e.Error())
-			msg = e.Error()
-		} else {
-			logger.Error().Any("Panic", err).Msg(config.SYSTEMERROR)
-			if msg, ok = err.(string); !ok {
-				msg = config.SYSTEMERROR
-			}
-		}
-		logger.Error().Msg(meta.LoggerTrace())
-
-		if !isdebug {
-			msg = config.SYSTEMERROR
-		}
-		http.Error(w, msg, http.StatusInternalServerError)
-	}
 }
 
 func (m *HttpMash) Stop(ctx context.Context) error {
