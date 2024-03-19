@@ -254,7 +254,7 @@ func (m *HttpMash) Listen() error {
 				if err = m.handler(ctx, data); err != nil {
 					data.Errorf(err.Error(), m.isdebug)
 				} else if msg, ok := data.Result.(proto.Message); ok && m.afterhandler != nil {
-					if err = m.afterhandler(ctx, msg, data.Response, *data.Callbackheader); err != nil {
+					if err = m.afterhandler(ctx, msg, w, *data.Callbackheader); err != nil {
 						data.Errorf(err.Error(), m.isdebug)
 					}
 				}

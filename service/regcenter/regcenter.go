@@ -114,19 +114,19 @@ func NewLocalCenter(path string) RegCenter {
 }
 
 func (l *LocalCenter) LoadDic(logger *zerolog.Logger) (*Router, metadata.ProtoTable) {
-	return loadConfig(l.path, true, logger)
+	return l.loadConfig(true, logger)
 }
 
 func (l *LocalCenter) LoadDicNoTable(logger *zerolog.Logger) *Router {
-	router, _ := loadConfig(l.path, false, logger)
+	router, _ := l.loadConfig(false, logger)
 	return router
 }
 
-func loadConfig(path string, useReflect bool, logger *zerolog.Logger) (*Router, metadata.ProtoTable) {
-	viper.SetConfigFile(path)
+func (l *LocalCenter) loadConfig(useReflect bool, logger *zerolog.Logger) (*Router, metadata.ProtoTable) {
+	viper.SetConfigFile(l.path)
 	err := viper.ReadInConfig()
 	if err != nil {
-		logger.Panic().Err(err).Msg(fmt.Sprintf(config.CONFIGFILEERROR, path))
+		logger.Panic().Err(err).Msg(fmt.Sprintf(config.CONFIGFILEERROR, l.path))
 	}
 	var cfg RouterConfig
 	if err := viper.Unmarshal(&cfg); err != nil {
