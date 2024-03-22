@@ -114,7 +114,6 @@ func (rs *RouterService) MatcherUnit() ware.HandlerUnit {
 		}
 
 		data.Descriptor.Method = descriptor.Method
-		data.Descriptor.PackageName = descriptor.PackageName
 		data.Descriptor.ServiceName = descriptor.ServiceName
 		data.Descriptor.RequestMessage = descriptor.RequestMessage
 		data.Descriptor.ResponseMessage = descriptor.ResponseMessage

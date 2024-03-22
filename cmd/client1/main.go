@@ -7,11 +7,12 @@ import (
 	"net"
 	pb1 "octopus/example/proto/hello"
 	pb2 "octopus/example/proto/test"
+	"reflect"
+	"strings"
 	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/reflection"
 )
 
 type server2 struct {
@@ -46,12 +47,32 @@ func main() {
 	}
 	//op := grpc.ForceServerCodec(codec.DefaultGRPCCodecs["application/proto"])
 	s := grpc.NewServer()
-
-	pb1.RegisterGreeterServer(s, new(server1))
+	testOne := new(server1)
+	pb1.RegisterGreeterServer(s, testOne)
 	pb2.RegisterNewGreeterServer(s, new(server2))
-	reflection.Register(s)
-
+	getInfo(pb1.Greeter_ServiceDesc)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
+	}
+}
+
+func getInfo(serviceDescs ...grpc.ServiceDesc) {
+	for _, desc := range serviceDescs {
+		fmt.Println(desc.ServiceName)
+		serverEntity := reflect.TypeOf(desc.HandlerType).Elem()
+		pkgPath := serverEntity.PkgPath()
+		pkgName := pkgPath[strings.LastIndex(pkgPath, "/")+1:]
+		fmt.Println(pkgName)
+		for j := 0; j < serverEntity.NumMethod(); j++ {
+			methodName := serverEntity.Method(j)
+			if !strings.Contains(methodName.Name, "mustEmbedUnimplemented") {
+				funcName := methodName.Type
+				inParam := funcName.In(1).Elem()
+				outParam := funcName.Out(0).Elem()
+				fmt.Println(methodName.Name)
+				fmt.Println(inParam.Name() + outParam.Name())
+			}
+
+		}
 	}
 }

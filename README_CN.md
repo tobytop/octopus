@@ -104,7 +104,7 @@ LimitIPService （service.NewLimitIPPerSecond）： 用于网站同个IP访问�
 
 默认的的url格式处理在metadata.DefaultPathHandler方法内，格式为：
 ```
-/{package}/{service}/{method}
+/{package}-{service}/{method} //{package}-{service} 就是 {serviceName}
 ```
 
 当然个可以自定义，这里有个实例代码：

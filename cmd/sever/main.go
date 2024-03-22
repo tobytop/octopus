@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	mash := NewHttpMash()
+	mash := NewGrpcAndHttpMash()
 	defer mash.Stop(context.Background())
 	mash.Listen()
 }

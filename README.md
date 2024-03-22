@@ -104,7 +104,7 @@ LimitIPService (service.NewLimitIPPerSecond): used to limit the number of visits
 
 The default url format is processed in the metadata.DefaultPathHandler method, and the format is：
 ```
-/{package}/{service}/{method}
+/{package}-{service}/{method} //{package}-{service} is {serviceName}
 ```
 
 Of course it can be customized, here is an example code：

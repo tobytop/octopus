@@ -1,16 +1,14 @@
 {
     "Routers":[
         {
-            "Package":"proto",
-            "Service":"Greeter",
+            "ServiceName":"proto.Greeter",
             "Method":"SayHello",
             "Host":"127.0.0.1:50051",
             "InMessage":"hello.HelloRequest",
             "OutMessage":"hello.HelloReply"
         },
         {
-            "Package":"proto",
-            "Service":"NewGreeter",
+            "ServiceName":"proto.NewGreeter",
             "Method":"SayHello",
             "Host":"127.0.0.1:50052",
             "MethodType":"POST",

@@ -55,7 +55,6 @@ type ErrorMeta struct {
 
 type URI struct {
 	HttpMethod  string
-	PackageName string
 	ServiceName string
 	Method      string
 	Host        string
@@ -87,7 +86,7 @@ func (d *Descriptor) convertToMessage(dic map[string]proto.Message) (proto.Messa
 }
 
 func (d *Descriptor) GetFullMethod() string {
-	return fmt.Sprintf("/%v.%v/%v", d.PackageName, d.ServiceName, d.Method)
+	return fmt.Sprintf("/%v/%v", d.ServiceName, d.Method)
 }
 
 func (m *MetaData) FormatAll(handler PathHandler) error {
@@ -106,13 +105,12 @@ func (m *MetaData) FormatAll(handler PathHandler) error {
 
 func DefaultPathHandler(path string, logger *zerolog.Logger) (*URI, error) {
 	st := strings.Split(path, "/")
-	if len(st) != 3 {
+	if len(st) != 2 {
 		return nil, fmt.Errorf(config.WRONGPATH, path)
 	}
 	return &URI{
-		PackageName: st[0],
-		ServiceName: st[1],
-		Method:      st[2],
+		ServiceName: strings.Replace(st[0], "-", ".", 1),
+		Method:      st[1],
 	}, nil
 }
 
@@ -146,8 +144,7 @@ func PathMatcher(key, path string, keytype config.ParamType) (*URI, error) {
 	}
 
 	return &URI{
-		PackageName: st[0],
-		ServiceName: st[1],
+		ServiceName: fmt.Sprintf("%v.%v", st[0], st[1]),
 		Method:      st[2],
 		Params:      params,
 	}, nil

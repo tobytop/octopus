@@ -341,15 +341,11 @@ func buildmeta(path string, logger *zerolog.Logger) *meta.MetaData {
 	if len(str) != 2 {
 		return nil
 	}
-	index := strings.LastIndex(str[0], ".")
-	packagename := str[0][:index]
-	servername := str[0][index+1:]
 	return &meta.MetaData{
 		Descriptor: &meta.Descriptor{
 			URI: &meta.URI{
 				Method:      str[1],
-				PackageName: packagename,
-				ServiceName: servername,
+				ServiceName: str[0],
 			},
 		},
 		Logger: logger,

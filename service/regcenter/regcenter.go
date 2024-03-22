@@ -41,13 +41,12 @@ type HostInfo struct {
 }
 
 type RouterInfo struct {
-	Package    string
-	Service    string
-	Method     string
-	Host       string
-	MethodType string
-	InMessage  string
-	OutMessage string
+	ServiceName string
+	Method      string
+	Host        string
+	MethodType  string
+	InMessage   string
+	OutMessage  string
 }
 
 func (cfg *RouterConfig) BuildSysConfig(useReflect bool, logger *zerolog.Logger) (*Router, metadata.ProtoTable, error) {
@@ -70,8 +69,7 @@ func (cfg *RouterConfig) BuildSysConfig(useReflect bool, logger *zerolog.Logger)
 				Host:        info.Host,
 				HttpMethod:  strings.ToUpper(info.MethodType),
 				Method:      info.Method,
-				PackageName: info.Package,
-				ServiceName: info.Service,
+				ServiceName: info.ServiceName,
 			},
 		}
 		p.RequestMessage = info.InMessage
