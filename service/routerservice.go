@@ -109,7 +109,7 @@ func (rs *RouterService) MatcherUnit() ware.HandlerUnit {
 	return func(ctx context.Context, data *metadata.MetaData) error {
 		key := strings.ToLower(data.Descriptor.GetFullMethod())
 		descriptor, ok := rs.Descriptors[key]
-		if !ok || !strings.EqualFold(descriptor.HttpMethod, data.Descriptor.HttpMethod) {
+		if !ok {
 			return errors.New(config.NOROUTER)
 		}
 
